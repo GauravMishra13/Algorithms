@@ -1,40 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-
-int isSorted(int *v, int size)
+#include <stdbool.h>
+ 
+bool is_sorted(int *a, int n)
 {
-    int i;
-    for (i = 0; i < size - 1; i++)
-        if (v[i] > v[i+1])
-            return 0;
-    return 1;
+  while ( --n >= 1 ) {
+    if ( a[n] < a[n-1] ) return false;
+  }
+  return true;
 }
-
-void bogoSort(int *v, int size)
+ 
+void shuffle(int *a, int n)
 {
-    int i, aux, r;
-    while (!isSorted(v, size))
-    {
-        for (i = 0; i < size; i++)
-        {
-            r = rand() % size;
-            aux = v[i];
-            v[i] = v[r];
-            v[r] = aux;
-        }
-    }
+  int i, t, r;
+  for(i=0; i < n; i++) {
+    t = a[i];
+    r = rand() % n;
+    a[i] = a[r];
+    a[r] = t;
+  }
 }
-
+ 
+void bogosort(int *a, int n)
+{
+  while ( !is_sorted(a, n) ) shuffle(a, n);
+}
+ 
 int main()
 {
-    srand(time(NULL));
-    int v[8] = {5, 8, 2, 1, 6, 4, 3, 7};
-
-    bogoSort(v, 8);
-    int i;
-    for (i = 0; i < 8; i++)
-        printf("%d ", v[i]);
-    printf("\n");
-    return 0;
+  int numbers[] = { 1, 10, 9,  7, 3, 0 };
+  int i;
+ 
+  bogosort(numbers, 6);
+  for (i=0; i < 6; i++) printf("%d ", numbers[i]);
+  printf("\n");
 }
